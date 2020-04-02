@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+
+struct nodo			//typedef permite dejar de utilizar los struct en el resto del código.
+	{
+		char *item;
+		struct nodo *sig;
+	};					//Variable de tipo nodo
+	
+
+
+struct lista	// 
+	{
+		struct nodo *prim;			//Creación de la lista. Asigna  un valor nulo y lo regresa
+		struct nodo *ulti;
+	};
+	
+	
+struct nodo *crear_elem(char *item)
+	{
+		struct nodo *e=(struct nodo*)malloc(sizeof(struct nodo));
+		e->item=item;
+		e->sig=NULL;	
+		return e;
+	}
+	
+struct lista *Agregar_elem(struct lista *L, char *item)
+	{
+		if(L!=NULL)
+			{	//agregar valor a la lista actual
+				struct nodo *e=crear_elem(item);
+				printf("\nCreando elemento con %s\n",item);
+			//	L->ulti->sig=e;     <---------------------Esta línea crashea el programa. No le puede asignar a *sig e.
+				L->ulti=e;
+				return L;
+			}
+		else
+			{	//Inicializar la lista
+				struct nodo *e=crear_elem(item);
+				struct lista *l=(struct lista*)malloc(sizeof(struct lista));
+				printf("\nInicializando lista con %s\n",item);
+				l->prim=e;
+				l->ulti=e;
+				return l;
+			}
+	}
+		
+char Producto[30];	
+int main()
+	{
+		struct lista *Lista=NULL;		//Apuntador tipo lista
+		char Repetir;
+		do
+			{
+				printf("Agrega productos");
+				scanf("%s",&Producto);
+				Lista=Agregar_elem(Lista,Producto);
+				printf("Si desea agregar más productos, presione S");
+				scanf("%s",&Repetir);
+				Repetir=toupper(Repetir);
+			}
+		while(Repetir=='S');
+		return 0;
+	}
